@@ -4,37 +4,41 @@ mouseOver = undefined;
 
 if !(is_undefined(selected)) && !(instance_exists(selected))
 	selected = undefined;
-
+	
 with (all) {
 	if (position_meeting(mouse_x, mouse_y, id)) {
 		other.mouseOver = id;
 		
-		if (mouse_check_button_pressed(mb_left)) && !(other.contextMenuOpen) {
-			if (id != other.selected) other.editMode = false;
+		if (other.input == 0) {
+		
+			if (mouse_check_button_pressed(mb_left)) && !(other.contextMenuOpen) {
+				if (id != other.selected) other.editMode = false;
 			
-			other.selected = id;
-			array_resize(other.winVars, 0);
-		}
-		
-		if !(other.editMode) {
-		
-			if (mouse_check_button_pressed(mb_middle)) {
-				other.dragging = id;
-			
-				other.contextMenuOpen = false;
-			}
-		
-			if (mouse_check_button_pressed(mb_right)) {
 				other.selected = id;
 				array_resize(other.winVars, 0);
-			
-				other.contextMenuOpen = true;	
-				other.contextMenuScale = 0;
-				other.contextMenuPos[0] = window_mouse_get_x() + 5;
-				other.contextMenuPos[1] = window_mouse_get_y() + 5;
 			}
+		
+			if !(other.editMode) {
+		
+				if (mouse_check_button_pressed(mb_middle)) {
+					other.dragging = id;
+			
+					other.contextMenuOpen = false;
+				}
+			}
+			
 		}
 	}
+}
+
+if (mouse_check_button_pressed(mb_right)) && !(editMode) {
+	selected = mouseOver;
+	array_resize(other.winVars, 0);
+
+	contextMenuOpen = true;	
+	contextMenuScale = 0;
+	contextMenuPos[0] = window_mouse_get_x() + 5;
+	contextMenuPos[1] = window_mouse_get_y() + 5;	
 }
 
 // set selected vars
@@ -61,14 +65,18 @@ if !(is_undefined(selected)) {
 
 // scrolling
 
-var shiftPressed = keyboard_check(vk_shift);
-if (mouse_wheel_up()) {
-	if !(shiftPressed) scrollY--;
-	else scrollX--;
-}
-if (mouse_wheel_down()) {
-	if !(shiftPressed) scrollY++;
-	else scrollX++;
+if (input == 0) {
+
+	var shiftPressed = keyboard_check(vk_shift);
+	if (mouse_wheel_up()) {
+		if !(shiftPressed) scrollY--;
+		else scrollX--;
+	}
+	if (mouse_wheel_down()) {
+		if !(shiftPressed) scrollY++;
+		else scrollX++;
+	}
+
 }
 
 if (scrollY < 0) scrollY = 0;

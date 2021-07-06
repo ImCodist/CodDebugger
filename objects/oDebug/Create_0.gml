@@ -4,6 +4,8 @@ gameHeight = window_get_height();
 scrollX = 0;
 scrollY = 0;
 
+version = "v1.0.0";
+
 enum debugColors {
 	window = c_dkgray,
 	windowTop = c_blue,
@@ -38,22 +40,22 @@ enum winVar {
 winVars[0][1] = 0;
 winVarsB[0][1] = 0;
 
-enum contextMenu {
-	width = 100,
-	height = 200
-}
-
 contextMenuOpen = false;
 contextMenuScale = 0;
 contextMenuPos[0] = 0; // x
 contextMenuPos[1] = 0; // y
 contextMenuOptions = ["Edit", "Delete"] // default
+contextMenuOptionsOther = ["Edit Globals"] // clicking not on a object
 
 selected = undefined;
 mouseOver = undefined;
 dragging = undefined;
 
 editMode = false;
+globalMode = false;
+input = 0;
+inputUIScale = 0;
+openedInput = 0;
 
 function updateVars() {
 	// game vars
