@@ -14,6 +14,8 @@ enum debugColors {
 }
 spacing = 15;
 
+FONT_MAIN = "MS Sans Serif";
+
 enum winGameVar {
 	x = 40,
 	y = 40,
@@ -72,3 +74,13 @@ function updateVars() {
 	}
 }
 updateVars();
+
+function string_digits_decimal(_str) {
+	var finalStr = string_digits(_str);
+	var pos = string_pos(".", _str);
+	if (pos != 0) finalStr = string_insert(".", finalStr, pos);
+	
+	return finalStr;
+}
+
+FONT_MAIN = font_add(FONT_MAIN, 12, false, false, 32, 128);

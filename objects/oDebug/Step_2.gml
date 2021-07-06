@@ -9,7 +9,7 @@ with (all) {
 	if (position_meeting(mouse_x, mouse_y, id)) {
 		other.mouseOver = id;
 		
-		if (other.input == 0) {
+		if (other.input == 0) && !(other.editMode) {
 		
 			if (mouse_check_button_pressed(mb_left)) && !(other.contextMenuOpen) {
 				if (id != other.selected) other.editMode = false;
@@ -18,13 +18,10 @@ with (all) {
 				array_resize(other.winVars, 0);
 			}
 		
-			if !(other.editMode) {
-		
-				if (mouse_check_button_pressed(mb_middle)) {
-					other.dragging = id;
+			if (mouse_check_button_pressed(mb_middle)) {
+				other.dragging = id;
 			
-					other.contextMenuOpen = false;
-				}
+				other.contextMenuOpen = false;
 			}
 			
 		}
@@ -33,6 +30,7 @@ with (all) {
 
 if (mouse_check_button_pressed(mb_right)) && !(editMode) {
 	selected = mouseOver;
+	if (keyboard_check(vk_shift)) selected = undefined;
 	array_resize(other.winVars, 0);
 
 	contextMenuOpen = true;	
@@ -83,6 +81,9 @@ if (scrollY < 0) scrollY = 0;
 if (scrollX < 0) scrollX = 0;
 
 // dragging
+if !(is_undefined(dragging)) && !(instance_exists(dragging))
+	dragging = undefined;
+
 if !(is_undefined(dragging)) {	
 	dragging.x = mouse_x - (dragging.sprite_width / 2 - dragging.sprite_xoffset);
 	dragging.y = mouse_y - (dragging.sprite_height / 2 - dragging.sprite_yoffset);

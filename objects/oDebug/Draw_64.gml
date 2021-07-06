@@ -1,3 +1,5 @@
+draw_set_font(FONT_MAIN);
+
 draw_set_color(c_red);
 draw_rectangle(0, 0, gameWidth, 10, false);
 draw_set_color(c_white);
@@ -214,13 +216,13 @@ if (input != 0) {
 	var valueEditing = "Integer";
 	if (input = 2) valueEditing = "String";
 	
+	if (input = 1) keyboard_string = string_digits_decimal(keyboard_string);
 	var finalString = keyboard_string;
-	if (input = 1) finalString = string_digits(finalString);
 	
 	draw_set_halign(fa_center);
 	
 	draw_text_transformed(gameWidth / 2, 180 + inputUIY, "Editing an " + valueEditing, 1.6, 1.6, 0);
-	draw_text_transformed(gameWidth / 2, 220 + inputUIY, "> " + finalString + " <", 3, 3, 0);
+	draw_text_transformed(gameWidth / 2, 220 + inputUIY, "> " + string(finalString) + " <", 3, 3, 0);
 	
 	draw_text(gameWidth / 2, 400 + inputUIY, "(Enter or Left Click to confirm)\n(Right Click to cancel)");
 	
@@ -233,6 +235,7 @@ if (input != 0) {
 		var startAt = clamp(scrollY, 0, array_length(array) - 1);
 		var varName = array[startAt][1];
 		
+		if (finalString == "") && (input = 1) finalString = "0";
 		if (input = 1) finalString = real(finalString);
 		
 		if !(globalMode)
