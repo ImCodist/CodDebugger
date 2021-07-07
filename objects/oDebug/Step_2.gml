@@ -101,11 +101,14 @@ if (editMode) {
 		var startAt = clamp(scrollY, 0, array_length(array) - 1);
 		var varName = array[startAt][1];
 		var arrayLeng = array_length(pinnedVars);
+		
+		var _id = "g";
+		if !(globalMode) && (!is_undefined(selected)) _id = selected.id;
 
 		var create = true;
 		var posToRemove = 0;
 		for (var i = 1; i < array_length(pinnedVars); ++i) {
-			if (pinnedVars[i][1] == varName) && (pinnedVars[i][2] == selected.id) {
+			if (pinnedVars[i][1] == varName) && (pinnedVars[i][2] == _id) {
 				create = false;
 				posToRemove = i;
 			}
@@ -114,7 +117,7 @@ if (editMode) {
 		if (create) {
 			pinnedVars[arrayLeng][0] = 0; // name
 			pinnedVars[arrayLeng][1] = varName; // name
-			pinnedVars[arrayLeng][2] = selected.id; // object
+			pinnedVars[arrayLeng][2] = _id; // object
 		} else {
 			array_delete(pinnedVars, posToRemove, 1);	
 		}
@@ -122,7 +125,7 @@ if (editMode) {
 }
 
 for (var i = 1; i < array_length(pinnedVars); ++i) {
-	if !(instance_exists(pinnedVars[i][2])) {
+	if (pinnedVars[i][2] != "g") && !(instance_exists(pinnedVars[i][2])) {
 		array_delete(pinnedVars, i, 1);
 	}
 }

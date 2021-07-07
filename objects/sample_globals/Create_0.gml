@@ -9,4 +9,4 @@ global.doubleTwentyOne = 2121;
 global.whatarentnumbers = "this";
 global.fruits = "pears";
 
-hiLol = "what?"
+thisObjectIsUsedTo = "test globals";

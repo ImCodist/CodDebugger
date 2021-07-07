@@ -43,8 +43,15 @@ function varBox(_x, _y, _w, _h, title, varArray, type) {
 			}
 		}
 		
-		if (type == "pinned") && !(is_undefined(selected)) && (varArray[i][2] == selected.id)
-			draw_set_color(c_yellow);
+		var _id = "g";
+		if !(globalMode) && (!is_undefined(selected)) _id = selected.id;
+		
+		if (type == "pinned") {
+			if !(is_undefined(selected)) && (varArray[i][2] == _id)
+				draw_set_color(c_yellow);
+			else if (varArray[i][2] == "g")
+				draw_set_color(c_ltgray);
+		}
 		
 		draw_text(_x + 10, _y + (spacing * (i-startAt)) + 25, txt);
 		

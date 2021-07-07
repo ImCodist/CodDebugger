@@ -84,7 +84,11 @@ function updateVars() {
 	}
 	
 	for (var i = 0; i < array_length(pinnedVars); ++i) {
-		pinnedVars[i][0] = variable_instance_get(pinnedVars[i][2], pinnedVars[i][1]);
+		var val = "undefined";
+		if (pinnedVars[i][2] = "g") val = variable_global_get(pinnedVars[i][1]);
+		else val = variable_instance_get(pinnedVars[i][2], pinnedVars[i][1]);
+		
+		pinnedVars[i][0] = val;
 	}
 }
 updateVars();
