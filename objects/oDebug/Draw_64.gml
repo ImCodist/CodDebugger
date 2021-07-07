@@ -115,7 +115,8 @@ if (editMode) && canEdit && (input == 0) {
 		keyboard_string = string(oldVal);
 		
 		if (is_string(oldVal)) input = 2;
-		else input = 1;
+		else if (is_real(oldVal)) input = 1;
+		else show_message("This type of value is not currently supported.\nSorry.");
 		
 		openedInput = true;
 	}
@@ -214,6 +215,7 @@ if (input != 0) {
 	draw_set_alpha(1);
 	
 	var valueEditing = "Integer";
+	if (input = 1) && (floor(real(keyboard_string)) != real(keyboard_string)) valueEditing = "Float";
 	if (input = 2) valueEditing = "String";
 	
 	if (input = 1) keyboard_string = string_digits_decimal(keyboard_string);
@@ -221,7 +223,7 @@ if (input != 0) {
 	
 	draw_set_halign(fa_center);
 	
-	draw_text_transformed(gameWidth / 2, 180 + inputUIY, "Editing an " + valueEditing, 1.6, 1.6, 0);
+	draw_text_transformed(gameWidth / 2, 180 + inputUIY, "Editing a " + valueEditing, 1.6, 1.6, 0);
 	draw_text_transformed(gameWidth / 2, 220 + inputUIY, "> " + string(finalString) + " <", 3, 3, 0);
 	
 	draw_text(gameWidth / 2, 400 + inputUIY, "(Enter or Left Click to confirm)\n(Right Click to cancel)");
@@ -244,6 +246,15 @@ if (input != 0) {
 			variable_global_set(varName, finalString);
 		
 		input = 0;
+	}
+	
+	if (input = 1) {
+		var change = (mouse_wheel_up() - mouse_wheel_down());
+		if (keyboard_check(vk_shift)) change = change * 0.1;
+		
+		var cur = keyboard_string;
+		if (cur == "") cur = "0";
+		if (change != 0) keyboard_string = string(real(cur) + change);
 	}
 	
 	if (mouse_check_button_pressed(mb_right))

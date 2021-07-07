@@ -78,7 +78,10 @@ updateVars();
 function string_digits_decimal(_str) {
 	var finalStr = string_digits(_str);
 	var pos = string_pos(".", _str);
+	var posNeg = string_pos("-", _str);
+	
 	if (pos != 0) finalStr = string_insert(".", finalStr, pos);
+	if (posNeg != 0) finalStr = string_insert("-", finalStr, posNeg);
 	
 	return finalStr;
 }
