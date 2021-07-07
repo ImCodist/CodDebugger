@@ -9,6 +9,7 @@ function varBox(_x, _y, _w, _h, title, varArray, type) {
 	
 	var startAt = clamp(scrollY, 0, array_length(varArray));
 	if (type == "donthide") startAt = 0;
+	if (type == "pinned") startAt = 1;
 	
 	draw_set_alpha(0.5);
 	draw_set_color(debugColors.windowTop);
@@ -27,6 +28,7 @@ function varBox(_x, _y, _w, _h, title, varArray, type) {
 	draw_text(_x, _y, title);
 	
 	var maxLength = 22;
+	if (type == "pinned") maxLength = 19;
 	
 	for (var i = startAt; i < array_length(varArray); ++i) {
 		var txt = varArray[i][1] + ": " + string(varArray[i][0]);
@@ -40,6 +42,9 @@ function varBox(_x, _y, _w, _h, title, varArray, type) {
 				txt = "> " + txt;
 			}
 		}
+		
+		if (type == "pinned") && !(is_undefined(selected)) && (varArray[i][2] == selected.id)
+			draw_set_color(c_yellow);
 		
 		draw_text(_x + 10, _y + (spacing * (i-startAt)) + 25, txt);
 		
@@ -64,6 +69,16 @@ if (winVar.height < 0) _y = (spacing*(array_length(winVars)-startAt)) + 80;
 
 varBox(winVar.x, _y, winVar.width, -1,
 "Built-In Vars", winVarsB, "donthide");
+
+}
+
+if (array_length(pinnedVars) > 1) {
+	
+var newX = pinnedVar.x;
+if (is_undefined(selected))
+	newX = pinnedVar.x2;
+varBox(newX, pinnedVar.y, pinnedVar.width, pinnedVar.height,
+"Pinned Vars", pinnedVars, "pinned");
 
 }
 

@@ -42,6 +42,16 @@ enum winVar {
 winVars[0][1] = 0;
 winVarsB[0][1] = 0;
 
+enum pinnedVar {
+	x = 780,
+	x2 = 1040,
+	y = 40,
+	width = 200,
+	height = -1
+}
+pinnedVars[0][1] = ""; // name
+pinnedVars[0][2] = 0; // object
+
 contextMenuOpen = false;
 contextMenuScale = 0;
 contextMenuPos[0] = 0; // x
@@ -71,6 +81,10 @@ function updateVars() {
 	for (var i = 0; i < varLeng; ++i) {
 		winGlobalVars[i][0] = variable_global_get(vars[i]);
 		winGlobalVars[i][1] = vars[i];
+	}
+	
+	for (var i = 0; i < array_length(pinnedVars); ++i) {
+		pinnedVars[i][0] = variable_instance_get(pinnedVars[i][2], pinnedVars[i][1]);
 	}
 }
 updateVars();
