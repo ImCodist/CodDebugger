@@ -1,15 +1,34 @@
+/*
+
+---------- STEP ----------
+
+Mostly used for inputs.
+Such as right clicking an object, or pinning a variable.
+
+*/
+
+// Update the variables each frame.
+// * I might make a minimal version of this where it only updates every 10 frames, or possibly longer.
 updateVars();
 
-mouseOver = undefined;
+mouseOver = undefined; // set mouseOver to undefined to make sure you mouse isnt over something your not over
 
+// when the selected object doesnt exist, set it to undefined
 if !(is_undefined(selected)) && !(instance_exists(selected))
 	selected = undefined;
-	
+
+// with each object, check if the mouse is over it
+// then check if it is left clicked, select it
+// if it is middle clicked, drag it around
+
+// * This could be done better. Like, only looping through each object on screen.
+// * Or finding each object that dont have variables at the start, and ignore em.
+// * In short, this should be changed, its not a good way of doing it.
 with (all) {
 	if (position_meeting(mouse_x, mouse_y, id)) {
-		other.mouseOver = id;
+		other.mouseOver = id; // make mouseOver equal the object the mouse is over
 		
-		if (other.input == 0) && !(other.editMode) {
+		if (other.input == 0) && !(other.editMode) { // make sure the user isnt in edit mode or the input ui
 		
 			if (mouse_check_button_pressed(mb_left)) && !(other.contextMenuOpen) {
 				if (id != other.selected) other.editMode = false;
@@ -28,30 +47,33 @@ with (all) {
 	}
 }
 
+// open context menu
 if (mouse_check_button_pressed(mb_right)) && !(editMode) {
 	selected = mouseOver;
 	if (keyboard_check(vk_shift)) selected = undefined;
 	array_resize(other.winVars, 0);
 
+	// open the context menu
 	contextMenuOpen = true;	
 	contextMenuScale = 0;
 	contextMenuPos[0] = window_mouse_get_x() + 5;
 	contextMenuPos[1] = window_mouse_get_y() + 5;	
 }
 
-// set selected vars
-
+// set selected instance vars
 if !(is_undefined(selected)) {
 	with (selected) {
+		// get all the variables names
 		var vars = variable_instance_get_names(id);
 		var varLeng = array_length(vars);
 		
+		// loop through each and set it in the array
 		for (var i = 0; i < varLeng; ++i) {
 		   	other.winVars[i][0] = variable_instance_get(id, vars[i]);
 			other.winVars[i][1] = vars[i];
 		}
 		
-		// built-in vars
+		// set all built in variables
 		other.winVarsB[0][0] = string(x) + ", " + string(y); other.winVarsB[0][1] = "XY";
 		other.winVarsB[1][0] = depth; other.winVarsB[1][1] = "DEPTH";
 		other.winVarsB[2][0] = direction; other.winVarsB[2][1] = "DIRECTION";
@@ -62,10 +84,9 @@ if !(is_undefined(selected)) {
 }
 
 // scrolling
-
 if (input == 0) {
 
-	var shiftPressed = keyboard_check(vk_shift);
+	var shiftPressed = keyboard_check(vk_shift); // shift moves horizontal
 	if (mouse_wheel_up()) {
 		if !(shiftPressed) scrollY--;
 		else scrollX--;
@@ -77,6 +98,7 @@ if (input == 0) {
 
 }
 
+// make sure the scrolling doesnt go below 0
 if (scrollY < 0) scrollY = 0;
 if (scrollX < 0) scrollX = 0;
 
@@ -85,26 +107,33 @@ if !(is_undefined(dragging)) && !(instance_exists(dragging))
 	dragging = undefined;
 
 if !(is_undefined(dragging)) {	
+	// set the position of the dragged object
 	dragging.x = mouse_x - (dragging.sprite_width / 2 - dragging.sprite_xoffset);
 	dragging.y = mouse_y - (dragging.sprite_height / 2 - dragging.sprite_yoffset);
 	
+	// when its let go, make it undefined
 	if (mouse_check_button_released(mb_middle))
-	dragging = undefined;
+		dragging = undefined;
 }
 
 // pin
 if (editMode) {
 	if (mouse_check_button_pressed(mb_middle)) {
+		// choose the array to use depending on if your pinning a global variable or not
 		var array = winVars;
 		if (globalMode) array = winGlobalVars;
 		
+		// find the selected variable
 		var startAt = clamp(scrollY, 0, array_length(array) - 1);
 		var varName = array[startAt][1];
 		var arrayLeng = array_length(pinnedVars);
 		
+		// set the id of the object
 		var _id = "g";
 		if !(globalMode) && (!is_undefined(selected)) _id = selected.id;
 
+		// loop through each of the pinned variables to make sure it isnt already pinned
+		// if it is pinned, remove it instead
 		var create = true;
 		var posToRemove = 0;
 		for (var i = 1; i < array_length(pinnedVars); ++i) {
@@ -114,6 +143,8 @@ if (editMode) {
 			}
 		}
 		
+		// if the variable isnt pinned, add its info to the array
+		// otherwise remove it
 		if (create) {
 			pinnedVars[arrayLeng][0] = 0; // name
 			pinnedVars[arrayLeng][1] = varName; // name
@@ -124,8 +155,13 @@ if (editMode) {
 	}
 }
 
+// if a object no longer exists, and a variable has been pinned from it
+// remove the variable from the array
 for (var i = 1; i < array_length(pinnedVars); ++i) {
 	if (pinnedVars[i][2] != "g") && !(instance_exists(pinnedVars[i][2])) {
 		array_delete(pinnedVars, i, 1);
 	}
 }
+
+// scott the woz
+// https://pbs.twimg.com/profile_images/1090774966147129344/RphnrzKd.jpg
